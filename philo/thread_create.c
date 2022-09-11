@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 01:57:59 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/11 04:17:38 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/11 05:21:06 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,17 @@ void	add_thread(t_thread_list **thread_list, t_thread_list *new)
 	if (*thread_list)
 		new->next = *thread_list;
 	*thread_list = new;
+}
+
+void	free_thread_list(t_thread_list *thread_list)
+{
+	t_thread_list	*aux;
+
+	while (thread_list)
+	{
+		free(thread_list->thread);
+		aux = thread_list->next;
+		free(thread_list);
+		thread_list = aux;
+	}
 }

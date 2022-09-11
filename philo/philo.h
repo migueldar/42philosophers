@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 22:48:37 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/11 04:11:51 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/11 05:42:40 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,15 @@
 typedef struct s_philo_list
 {
 	pthread_mutex_t		*mutex_left;
-	int					*fork_l;
 	pthread_mutex_t		*mutex_right;
-	int					*fork_r;
 	pthread_mutex_t		*mutex_write;
 	pthread_mutex_t		*mutex_end;
-	int					*end;
 	int					id;
 	int					time_die;
 	int					time_eat;
 	int					time_sleep;
 	int					number_eat;
+	int					*end;
 	struct timeval		*time_init;
 	struct timeval		*time_last_ate;
 	struct s_philo_list	*next;
@@ -60,10 +58,12 @@ void			printf_wrapper(int type, pthread_mutex_t *write_mutex,
 					int philo_id, struct timeval *time_init);
 t_thread_list	*new_thread(t_philo_list *philo);
 void			add_thread(t_thread_list **thread_list, t_thread_list *new);
-t_philo_list	*new_philo(int *args, int counter, pthread_mutex_t *mutex_write, pthread_mutex_t *mutex_end, int *end);
+t_philo_list	*new_philo(int *args, int counter,
+					pthread_mutex_t *mutex_write, pthread_mutex_t *mutex_end);
 void			add_philo(t_philo_list **philo_list, t_philo_list *new);
 void			add_left_forks(t_philo_list *list);
 void			end_to_true(t_philo_list *philo);
 int				end_value(t_philo_list *philo);
+void			free_thread_list(t_thread_list *thread_list);
 
 #endif

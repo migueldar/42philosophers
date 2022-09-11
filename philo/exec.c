@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/10 02:51:56 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/11 04:40:36 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/11 05:39:06 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	*philo_exec(void *philo_void)
 {
 	t_philo_list	*philo;
 
+	//printf("Hello from %d\n", philo->id);
 	philo = (t_philo_list *) philo_void;
 	while (philo->number_eat == -1 || (philo->number_eat)-- > 0)
 	{
@@ -83,5 +84,10 @@ void	*philo_exec(void *philo_void)
 			break ;
 		philo_think(philo);
 	}
+	pthread_mutex_destroy(philo->mutex_right);
+	free(philo->mutex_right);
+	free(philo->time_init);
+	free(philo->time_last_ate);
+	free(philo);
 	return (NULL);
 }
