@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 01:58:26 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/11 05:32:52 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/16 21:30:20 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ t_philo_list	*new_philo(int *args, int counter, pthread_mutex_t *mutex_write, pt
 		return (NULL);
 	new->mutex_right = malloc(sizeof(pthread_mutex_t));
 	pthread_mutex_init(new->mutex_right, NULL);
+	new->fork_right = malloc(4);
+	*(new->fork_right) = 0;
 	new->mutex_write = mutex_write;
 	new->mutex_end = mutex_end;
 	new->id = counter;
@@ -57,14 +59,41 @@ void	add_philo(t_philo_list **philo_list, t_philo_list *new)
 void	add_left_forks(t_philo_list *list)
 {
 	pthread_mutex_t *aux;
+	int				*aux_int;
 
 	aux = list->mutex_right;
+	aux_int = list->fork_right;
 	list = list->next;
 	while (list->id != 1)
 	{
 		list->mutex_left = aux;
+		list->fork_left = aux_int;
 		aux = list->mutex_right;
+		aux_int = list->fork_right;
 		list = list->next;
 	}
 	list->mutex_left = aux;
+	list->fork_left = aux_int;
+}
+
+//consider 1 philo
+void	free_philo_list(t_philo_list *list)
+{
+	t_philo_list	*aux;
+	t_philo_list	*head;
+
+	head = list;
+	while (42)
+	{
+		pthread_mutex_destroy(list->mutex_right);
+		free(list->mutex_right);
+		free(list->fork_right);
+		free(list->time_init);
+		free(list->time_last_ate);
+		aux = list->next;
+		free(list);
+		if (aux == head)
+			break ;
+		list = aux;
+	}
 }

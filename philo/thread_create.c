@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 01:57:59 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/11 05:21:06 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/12 00:19:24 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ t_thread_list	*new_thread(t_philo_list *philo)
 	ret->thread = malloc(sizeof(pthread_t));
 	pthread_create(ret->thread, NULL, philo_exec, philo);
 	ret->next = NULL;
-	usleep(200);
 	return (ret);
 }
 

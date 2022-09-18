@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 22:35:55 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/11 05:43:37 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/16 21:36:56 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	*parse(char **argv, int *status)
 //manage case where philo || seconds is 0
 //think about 1 philo
 //free everything
+//sleep 0 seconds
 int	main(int argc, char **argv)
 {
 	//atexit(leaks);
@@ -96,6 +97,7 @@ int	main(int argc, char **argv)
 	}
 	free(args);
 	free_thread_list(thread_l);
+	free_philo_list(philo_l);
 	pthread_mutex_destroy(&mutex_write);
 	pthread_mutex_destroy(&mutex_end);
 	return (0);

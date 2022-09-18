@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 22:48:37 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/11 05:42:40 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/18 23:37:17 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@
 typedef struct s_philo_list
 {
 	pthread_mutex_t		*mutex_left;
+	int					*fork_left;
 	pthread_mutex_t		*mutex_right;
+	int					*fork_right;
 	pthread_mutex_t		*mutex_write;
 	pthread_mutex_t		*mutex_end;
 	int					id;
@@ -65,5 +67,7 @@ void			add_left_forks(t_philo_list *list);
 void			end_to_true(t_philo_list *philo);
 int				end_value(t_philo_list *philo);
 void			free_thread_list(t_thread_list *thread_list);
+void			free_philo_list(t_philo_list *list);
+void			ft_usleep(int seconds);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 23:31:10 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/11 05:36:54 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/16 20:43:21 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,19 @@ void	printf_wrapper(int type, pthread_mutex_t *write_mutex,
 	time_since_beg += (time_curr.tv_usec - time_init->tv_usec) / 1000;
 	pthread_mutex_lock(write_mutex);
 	if (type == 0)
-		printf("%s[%lldms] %d has taken a fork %s\n",
+		printf("%s[%lldms] %d has taken a fork%s\n",
 			CYAN, time_since_beg, philo_id, FN);
 	else if (type == 1)
-		printf("%s[%lldms] %d is eating %s\n",
+		printf("%s[%lldms] %d is eating%s\n",
 			BLUE, time_since_beg, philo_id, FN);
 	else if (type == 2)
-		printf("%s[%lldms] %d is sleeping %s\n",
+		printf("%s[%lldms] %d is sleeping%s\n",
 			GREEN, time_since_beg, philo_id, FN);
 	else if (type == 3)
-		printf("%s[%lldms] %d is thinking %s\n",
+		printf("%s[%lldms] %d is thinking%s\n",
 			PINK, time_since_beg, philo_id, FN);
 	else if (type == 4)
-		printf("%s[%lldms] %d died %s\n", RED, time_since_beg, philo_id, FN);
+		printf("%s[%lldms] %d died%s\n", RED, time_since_beg, philo_id, FN);
 	pthread_mutex_unlock(write_mutex);
 }
 
