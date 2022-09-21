@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/10 02:51:56 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/16 22:02:22 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/21 22:43:54 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,56 +33,47 @@ int	check_philo_dead(t_philo_list *philo)
 void	philo_sleep(t_philo_list *philo)
 {
 	printf_wrapper(2, philo->mutex_write, philo->id, philo->time_init);
-	usleep(philo->time_sleep * 1000);
+	ft_usleep(philo->time_sleep * 1000);
 }
 
 void	philo_think(t_philo_list *philo)
 {
 	printf_wrapper(3, philo->mutex_write, philo->id, philo->time_init);
+	ft_usleep(1000 * (philo->time_eat - philo->time_sleep + 2));
 }
 
 void	philo_eat(t_philo_list *philo)
 {
-	int	ended;
-	int	a;
-	int	b;
+	char	could_get_right;
+	char	could_get_left;
 
-	ended = 0;
-	while (!ended)
+	could_get_right = 0;
+	could_get_left = 0;
+	while (1)
 	{
-		pthread_mutex_lock(philo->mutex_right);
-		a = *(philo->fork_right);
-		pthread_mutex_unlock(philo->mutex_right);
-		pthread_mutex_lock(philo->mutex_left);
-		b = *(philo->fork_left);
-		pthread_mutex_lock(philo->mutex_left);
 		if (end_value(philo) || check_philo_dead(philo))
+			break ;
+		could_get_right = try_to_set_one(philo->fork_right, philo->mutex_right);
+		if (could_get_right)
 		{
-			pthread_mutex_unlock(philo->mutex_right);
-			pthread_mutex_unlock(philo->mutex_left);
-			return ;
+			could_get_left = try_to_set_one(philo->fork_left, philo->mutex_left);
+			if (could_get_left)
+			{
+				gettimeofday(philo->time_last_ate, NULL);
+				printf_wrapper(0, philo->mutex_write, philo->id, philo->time_init);
+				printf_wrapper(0, philo->mutex_write, philo->id, philo->time_init);
+				printf_wrapper(1, philo->mutex_write, philo->id, philo->time_init);
+				ft_usleep(philo->time_eat * 1000);
+				set_to_zero(philo->fork_left, philo->mutex_left);
+				set_to_zero(philo->fork_right, philo->mutex_right);
+				break ;
+			}
+			set_to_zero(philo->fork_right, philo->mutex_right);
 		}
-		if (!*(philo->fork_left) && !*(philo->fork_right))
-		{
-			*(philo->fork_left) = 1;
-			*(philo->fork_right) = 1;
-			pthread_mutex_unlock(philo->mutex_right);
-			pthread_mutex_unlock(philo->mutex_left);
-			printf_wrapper(0, philo->mutex_write, philo->id, philo->time_init);
-			printf_wrapper(0, philo->mutex_write, philo->id, philo->time_init);
-			printf_wrapper(1, philo->mutex_write, philo->id, philo->time_init);
-			usleep(philo->time_eat * 1000);
-			gettimeofday(philo->time_last_ate, NULL);
-			pthread_mutex_lock(philo->mutex_right);
-			pthread_mutex_lock(philo->mutex_left);
-			*(philo->fork_left) = 0;
-			*(philo->fork_right) = 0;
-			pthread_mutex_unlock(philo->mutex_right);
-			pthread_mutex_unlock(philo->mutex_left);
-			break;
-		}
-		pthread_mutex_unlock(philo->mutex_right);
-		pthread_mutex_unlock(philo->mutex_left);
+		ft_usleep(1000);
+		// pthread_mutex_lock(philo->mutex_write);
+		// printf("Whileando\n");
+		// pthread_mutex_unlock(philo->mutex_write);
 	}
 }
 
@@ -91,7 +82,6 @@ void	*philo_exec(void *philo_void)
 	t_philo_list	*philo;
 
 	philo = (t_philo_list *) philo_void;
-	//printf("Hello from %d\n", philo->id);
 	while (philo->number_eat == -1 || (philo->number_eat)-- > 0)
 	{
 		if (end_value(philo) || check_philo_dead(philo))

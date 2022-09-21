@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 22:48:37 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/18 23:37:17 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/21 22:29:31 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ void			end_to_true(t_philo_list *philo);
 int				end_value(t_philo_list *philo);
 void			free_thread_list(t_thread_list *thread_list);
 void			free_philo_list(t_philo_list *list);
-void			ft_usleep(int seconds);
+void			ft_usleep(long long seconds);
+void			set_to_zero(int *fork, pthread_mutex_t *mutex);
+char			try_to_set_one(int *fork, pthread_mutex_t *mutex);
 
 #endif
