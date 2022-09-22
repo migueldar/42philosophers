@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 23:31:10 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/16 20:43:21 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/22 05:54:03 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,14 @@ void	end_to_true(t_philo_list *philo)
 	pthread_mutex_lock(philo->mutex_end);
 	*(philo->end) = 1;
 	pthread_mutex_unlock(philo->mutex_end);
+}
+
+int	ft_strlen(const char *str)
+{
+	int	ret;
+
+	ret = 0;
+	while (str && *(str++))
+		ret++;
+	return (ret);
 }

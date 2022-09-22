@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/10 02:51:56 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/21 22:43:54 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/22 02:44:10 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	philo_sleep(t_philo_list *philo)
 void	philo_think(t_philo_list *philo)
 {
 	printf_wrapper(3, philo->mutex_write, philo->id, philo->time_init);
-	ft_usleep(1000 * (philo->time_eat - philo->time_sleep + 2));
+	ft_usleep(1000 * philo->time_think);
 }
 
 void	philo_eat(t_philo_list *philo)
@@ -70,10 +70,7 @@ void	philo_eat(t_philo_list *philo)
 			}
 			set_to_zero(philo->fork_right, philo->mutex_right);
 		}
-		ft_usleep(1000);
-		// pthread_mutex_lock(philo->mutex_write);
-		// printf("Whileando\n");
-		// pthread_mutex_unlock(philo->mutex_write);
+		ft_usleep(500);
 	}
 }
 
