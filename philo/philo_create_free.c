@@ -47,8 +47,8 @@ static t_philo_list	*malloc_philo(void)
 		return (garbage_coll_philo(new, new->time_init,
 				new->time_last_ate, new->fork_right), NULL);
 	if (pthread_mutex_init(new->mutex_right, NULL))
-		return (garbage_coll_philo(new, new->time_init, new->time_last_ate,
-				new->fork_right), free(new->mutex_right), NULL);
+		return (free(new->mutex_right), garbage_coll_philo(new, new->time_init, new->time_last_ate,
+				new->fork_right), NULL);
 	return (new);
 }
 
