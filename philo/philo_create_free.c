@@ -6,13 +6,14 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 01:58:26 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/22 05:49:45 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/23 02:15:56 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	gbj_c_philo(t_philo_list *list, struct timeval *time1, struct timeval *time2, int *fork)
+static void	garbage_coll_philo(t_philo_list *list, struct timeval *time1,
+							struct timeval *time2, int *fork)
 {
 	if (time1)
 		free(time1);
@@ -24,7 +25,7 @@ void	gbj_c_philo(t_philo_list *list, struct timeval *time1, struct timeval *time
 		free(list);
 }
 
-t_philo_list	*malloc_philo()
+static t_philo_list	*malloc_philo(void)
 {
 	t_philo_list	*new;
 
@@ -33,22 +34,27 @@ t_philo_list	*malloc_philo()
 		return (NULL);
 	new->time_init = malloc(sizeof(struct timeval));
 	if (!(new->time_init))
-		return (gbj_c_philo(new, NULL, NULL, NULL), NULL);
+		return (garbage_coll_philo(new, NULL, NULL, NULL), NULL);
 	new->time_last_ate = malloc(sizeof(struct timeval));
 	if (!(new->time_last_ate))
-		return (gbj_c_philo(new, new->time_init, NULL, NULL), NULL);
+		return (garbage_coll_philo(new, new->time_init, NULL, NULL), NULL);
 	new->fork_right = malloc(4);
 	if (!(new->fork_right))
-		return (gbj_c_philo(new, new->time_init, new->time_last_ate, NULL), NULL);
+		return (garbage_coll_philo(new, new->time_init,
+				new->time_last_ate, NULL), NULL);
 	new->mutex_right = malloc(sizeof(pthread_mutex_t));
 	if (!(new->mutex_right))
-		return (gbj_c_philo(new, new->time_init, new->time_last_ate, new->fork_right), NULL);
+		return (garbage_coll_philo(new, new->time_init,
+				new->time_last_ate, new->fork_right), NULL);
 	if (pthread_mutex_init(new->mutex_right, NULL))
-		return (gbj_c_philo(new, new->time_init, new->time_last_ate, new->fork_right), free(new->mutex_right), NULL);
+		return (garbage_coll_philo(new, new->time_init, new->time_last_ate,
+				new->fork_right), free(new->mutex_right), NULL);
 	return (new);
 }
 
-t_philo_list	*new_philo(int *args, int counter, pthread_mutex_t *mutex_write, pthread_mutex_t *mutex_end)
+static t_philo_list	*new_philo(int *args, int counter,
+								pthread_mutex_t *mutex_write,
+								pthread_mutex_t *mutex_end)
 {
 	t_philo_list	*new;
 
@@ -85,47 +91,6 @@ void	add_philo(t_philo_list **philo_list, t_philo_list *new)
 	aux = (*philo_list)->next;
 	(*philo_list)->next = new;
 	new->next = aux;
-}
-
-void	add_left_forks(t_philo_list *list)
-{
-	pthread_mutex_t	*aux;
-	int				*aux_int;
-
-	aux = list->mutex_right;
-	aux_int = list->fork_right;
-	list = list->next;
-	while (list->id != 1)
-	{
-		list->mutex_left = aux;
-		list->fork_left = aux_int;
-		aux = list->mutex_right;
-		aux_int = list->fork_right;
-		list = list->next;
-	}
-	list->mutex_left = aux;
-	list->fork_left = aux_int;
-}
-
-void	free_philo_list(t_philo_list *list)
-{
-	t_philo_list	*aux;
-	t_philo_list	*head;
-
-	head = list;
-	while (list && 42)
-	{
-		pthread_mutex_destroy(list->mutex_right);
-		free(list->mutex_right);
-		free(list->fork_right);
-		free(list->time_init);
-		free(list->time_last_ate);
-		aux = list->next;
-		free(list);
-		if (aux == head)
-			break ;
-		list = aux;
-	}
 }
 
 t_philo_list	*philo_create(int *args,

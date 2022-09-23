@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/10 02:51:56 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/22 02:44:10 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/23 02:20:00 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ int	check_philo_dead(t_philo_list *philo)
 			- philo->time_last_ate->tv_usec) / 1000;
 	if (time_since_ate > (long long) philo->time_die)
 	{
-		printf_wrapper(4, philo->mutex_write, philo->id, philo->time_init);
-		end_to_true(philo);
+		printf_wrapper(4, philo);
 		return (1);
 	}
 	return (0);
@@ -32,37 +31,30 @@ int	check_philo_dead(t_philo_list *philo)
 
 void	philo_sleep(t_philo_list *philo)
 {
-	printf_wrapper(2, philo->mutex_write, philo->id, philo->time_init);
+	printf_wrapper(2, philo);
 	ft_usleep(philo->time_sleep * 1000);
 }
 
 void	philo_think(t_philo_list *philo)
 {
-	printf_wrapper(3, philo->mutex_write, philo->id, philo->time_init);
-	ft_usleep(1000 * philo->time_think);
+	printf_wrapper(3, philo);
+	ft_usleep(philo->time_think * 1000);
 }
 
 void	philo_eat(t_philo_list *philo)
 {
-	char	could_get_right;
-	char	could_get_left;
-
-	could_get_right = 0;
-	could_get_left = 0;
 	while (1)
 	{
 		if (end_value(philo) || check_philo_dead(philo))
 			break ;
-		could_get_right = try_to_set_one(philo->fork_right, philo->mutex_right);
-		if (could_get_right)
+		if (try_to_set_one(philo->fork_right, philo->mutex_right))
 		{
-			could_get_left = try_to_set_one(philo->fork_left, philo->mutex_left);
-			if (could_get_left)
+			if (try_to_set_one(philo->fork_left, philo->mutex_left))
 			{
 				gettimeofday(philo->time_last_ate, NULL);
-				printf_wrapper(0, philo->mutex_write, philo->id, philo->time_init);
-				printf_wrapper(0, philo->mutex_write, philo->id, philo->time_init);
-				printf_wrapper(1, philo->mutex_write, philo->id, philo->time_init);
+				printf_wrapper(0, philo);
+				printf_wrapper(0, philo);
+				printf_wrapper(1, philo);
 				ft_usleep(philo->time_eat * 1000);
 				set_to_zero(philo->fork_left, philo->mutex_left);
 				set_to_zero(philo->fork_right, philo->mutex_right);

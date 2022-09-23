@@ -6,13 +6,13 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 01:57:59 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/22 05:36:15 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/23 01:47:46 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-t_thread_list	*new_thread(t_philo_list *philo)
+static t_thread_list	*new_thread(t_philo_list *philo)
 {
 	t_thread_list	*ret;
 
@@ -24,12 +24,11 @@ t_thread_list	*new_thread(t_philo_list *philo)
 		return (free(ret), NULL);
 	if (pthread_create(ret->thread, NULL, philo_exec, philo))
 		return (free(ret->thread), free(ret), NULL);
-	ft_usleep(100);
 	ret->next = NULL;
 	return (ret);
 }
 
-void	add_thread(t_thread_list **thread_list, t_thread_list *new)
+static void	add_thread(t_thread_list **thread_list, t_thread_list *new)
 {
 	if (*thread_list)
 		new->next = *thread_list;
@@ -67,7 +66,13 @@ t_thread_list	*thread_create(int *args, t_philo_list *philo_l)
 			free_thread_list(thread_l);
 		}
 		add_thread(&thread_l, thread_aux);
-		philo_l = philo_l->next;
+		philo_l = philo_l->next->next;
+		if (counter == (args[0] + 1) / 2)
+		{
+			if (args[0] % 2 == 0)
+				philo_l = philo_l->next;
+			ft_usleep(100);
+		}
 	}
 	return (thread_l);
 }
