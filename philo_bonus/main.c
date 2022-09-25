@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 22:35:55 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/23 02:28:08 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/25 06:05:40 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 // 	return (calloc(n, 1));
 // }
 
-// void	leaks(void)
-// {
-// 	system("leaks philosophers");
-// }
+void	leaks(void)
+{
+	system("leaks philosophers");
+}
 
 //status 0 if fail
 //-1 in last parameter means no limit of iteractions
@@ -57,18 +57,21 @@ static int	*parse(int argc, char **argv)
 	return (ret);
 }
 
-int	garbaje_coll(int *args, const char *msg)
+int	garbaje_coll(int *args, t_philo *philo, int unlink_sem, const char *msg)
 {
 	if (args)
 		free(args);
+	if (philo)
+		free_philo(philo);
+	if (unlink_sem)
+		unlink_semaphores();
 	if (msg)
 		write(2, msg, ft_strlen(msg));
 	return (1);
 }
 
 //TODO
-//test for 1 philo
-//protect everthing
+//data races
 int	main(int argc, char **argv)
 {
 	int			*args;
@@ -76,24 +79,21 @@ int	main(int argc, char **argv)
 	t_philo		*philo;
 	t_pid_list	*pid_list;
 
+	unlink_semaphores();
 	args = parse(argc, argv);
 	if (!args)
 		return (1);
 	philo = create_philo(args);
 	if (!philo)
-		return (garbaje_coll(args, "Philo init fail\n"));
+		return (garbaje_coll(args, NULL, 0, "Philo init fail\n"), 1);
 	status = create_semaphores(args[0]);
 	if (!status)
-		return (garbaje_coll(args, "Semaphores creation fail\n"));
-	status++;
+		return (garbaje_coll(args, philo, 1, "Semaphores creation fail\n"), 1);
 	pid_list = create_processes(args[0], philo);
-	sem_t *sem = sem_open(SEM_END, 0);
-	sem_post(sem);
-	sem_close(sem);
+	if (!pid_list)
+		return (garbaje_coll(args, philo, 1, "Fork fail\n"), 1);
 	processes_wait(pid_list);
 	free_pid_list(pid_list);
-	free_philo(philo);
-	unlink_semaphores();
-	free(args);
-	//garbaje_coll(args, &mutex_write, &mutex_end, NULL);
+	garbaje_coll(args, philo, 1, NULL);
+	//atexit(leaks);
 }

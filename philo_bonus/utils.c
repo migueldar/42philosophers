@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 23:31:10 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/23 01:37:52 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/25 08:40:12 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	printf_wrapper(int type, t_philo *philo)
 {
 	struct timeval	t_curr;
 	long long		t_snc_beg;	
-	
+
 	sem_wait(philo->sem_write);
 	gettimeofday(&t_curr, NULL);
 	t_snc_beg = (t_curr.tv_sec - philo->time_init->tv_sec) * 1000;
@@ -65,8 +65,7 @@ void	printf_wrapper(int type, t_philo *philo)
 	else if (type == 4)
 	{
 		printf("%s[%lldms] %d died%s\n", RED, t_snc_beg, philo->id, FN);
-		kill(philo->pid_die, 9);
-		sem_post(philo->sem_write);
+		return ;
 	}
 	sem_post(philo->sem_write);
 }
@@ -79,4 +78,23 @@ int	ft_strlen(const char *str)
 	while (str && *(str++))
 		ret++;
 	return (ret);
+}
+
+void	ft_usleep(long long useconds)
+{
+	struct timeval	start_time;
+	struct timeval	curr_time;
+	long long		start_time_u;
+	long long		curr_time_u;
+
+	gettimeofday(&start_time, NULL);
+	start_time_u = start_time.tv_sec * 1000000 + start_time.tv_usec;
+	gettimeofday(&curr_time, NULL);
+	curr_time_u = curr_time.tv_sec * 1000000 + curr_time.tv_usec;
+	while (curr_time_u - start_time_u < useconds)
+	{
+		usleep(100);
+		gettimeofday(&curr_time, NULL);
+		curr_time_u = curr_time.tv_sec * 1000000 + curr_time.tv_usec;
+	}
 }
