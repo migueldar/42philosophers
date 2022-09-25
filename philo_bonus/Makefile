@@ -1,11 +1,11 @@
 NAME = philosophers
-SRC = main.c utils.c exec.c philo_create_free.c process_create.c semaphore_create_destroy.c end.c philo_actions.c
-CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
+SRC = main.c utils.c exec.c philo_create_free.c process_create.c semaphore_create_destroy.c philo_actions.c
+CFLAGS = -Wall -Wextra -Werror -O3
 RM = /bin/rm -rf
 OBJ = $(SRC:.c=.o)
 
 $(NAME): $(OBJ)
-	gcc $(OBJ) -o philosophers -fsanitize=thread
+	gcc $(OBJ) -o philosophers
 all: $(NAME)
 clean:
 	$(RM) $(OBJ)

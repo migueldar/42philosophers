@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 22:48:37 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/25 09:01:51 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/25 23:12:55 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@
 # define SEM_FORK	"semaphore_fork"
 # define SEM_WRITE	"semaphore_write"
 # define SEM_SYNC	"semaphore_sync"
-# define SEM_END	"semaphore_end"
-# define SEM_EXIT_D	"semaphore_exit_dead"
-# define SEM_EXIT_N "semaphore_exit_natural"
-# define MUTEX_END	"semaphore_mutex_end"
+# define MUTEX_TIME	"semaphore_mutex_time"
 
 typedef struct s_philo
 {
@@ -51,17 +48,12 @@ typedef struct s_philo
 	int				time_sleep;
 	int				time_think;
 	int				number_eat;
-	int				end;
-	struct timeval	*time_init;
-	struct timeval	*time_last_ate;
+	struct timeval	time_init;
+	struct timeval	time_last_ate;
 	sem_t			*sem_fork;
 	sem_t			*sem_write;
 	sem_t			*sem_sync;
-	sem_t			*sem_end;
-	sem_t			*sem_exit_d;
-	sem_t			*sem_exit_n;
-	sem_t			*mutex_end;
-	int				pid_die;
+	sem_t			*mutex_time;
 }	t_philo;
 
 typedef struct s_pid_list
@@ -74,16 +66,14 @@ int				ft_atoi(const char *str, int *status);
 int				ft_strlen(const char *str);
 void			ft_usleep(long long seconds);
 void			printf_wrapper(int type, t_philo *philo);
-t_philo			*create_philo(int *args);
-void			free_philo(t_philo *philo);
+t_philo			create_philo(int *args);
 t_pid_list		*create_processes(int number_philos, t_philo *philo);
-void			processes_wait(t_pid_list *pid_list);
+void			processes_kill(t_pid_list *pid_list);
 void			free_pid_list(t_pid_list *pid_list);
 void			philo_exec(int num, t_philo *philo);
-int				create_semaphores(int n_forks);
+int				create_semaphores(int n_forks, t_philo *philo);
+void			close_semaphores(t_philo *philo);
 void			unlink_semaphores(void);
-void			end_to_one(t_philo *philo);
-int				end_value(t_philo *philo);
 void			philo_loop(t_philo *philo);
 //void			*malloc(size_t n);
 

@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 22:35:55 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/25 06:05:40 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/25 23:27:20 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,19 @@ static int	*parse(int argc, char **argv)
 		counter++;
 	}
 	if (counter == 5)
-		ret[4] = -1;
+		ret[4] = -2;
 	return (ret);
 }
 
-int	garbaje_coll(int *args, t_philo *philo, int unlink_sem, const char *msg)
+int	garbaje_coll(int *args, t_philo *philo, const char *msg)
 {
 	if (args)
 		free(args);
 	if (philo)
-		free_philo(philo);
-	if (unlink_sem)
+	{
+		close_semaphores(philo);
 		unlink_semaphores();
+	}
 	if (msg)
 		write(2, msg, ft_strlen(msg));
 	return (1);
@@ -76,7 +77,7 @@ int	main(int argc, char **argv)
 {
 	int			*args;
 	int			status;
-	t_philo		*philo;
+	t_philo		philo;
 	t_pid_list	*pid_list;
 
 	unlink_semaphores();
@@ -84,16 +85,13 @@ int	main(int argc, char **argv)
 	if (!args)
 		return (1);
 	philo = create_philo(args);
-	if (!philo)
-		return (garbaje_coll(args, NULL, 0, "Philo init fail\n"), 1);
-	status = create_semaphores(args[0]);
+	status = create_semaphores(args[0], &philo);
 	if (!status)
-		return (garbaje_coll(args, philo, 1, "Semaphores creation fail\n"), 1);
-	pid_list = create_processes(args[0], philo);
+		return (garbaje_coll(args, &philo, "Semaphores creation fail\n"), 1);
+	pid_list = create_processes(args[0], &philo);
 	if (!pid_list)
-		return (garbaje_coll(args, philo, 1, "Fork fail\n"), 1);
-	processes_wait(pid_list);
+		return (garbaje_coll(args, &philo, "Fork fail\n"), 1);
+	processes_kill(pid_list);
 	free_pid_list(pid_list);
-	garbaje_coll(args, philo, 1, NULL);
-	//atexit(leaks);
+	garbaje_coll(args, &philo, NULL);
 }

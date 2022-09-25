@@ -6,17 +6,11 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 01:57:59 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/25 09:10:18 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/25 23:04:32 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	wait_to_die(void)
-{
-	while (1)
-		ft_usleep(500);
-}
 
 void	create_append_list(int pid, t_pid_list **list)
 {
@@ -46,16 +40,8 @@ t_pid_list	*create_processes(int number_philos, t_philo *philo)
 {
 	int			counter;
 	int			pid;
-	int			pid_die;
 	t_pid_list	*pid_list;
-	sem_t		*sem;
 
-	pid_die = fork();
-	if (pid_die == -1)
-		return (NULL);
-	if (pid_die == 0)
-		wait_to_die();
-	philo->pid_die = pid_die;
 	pid_list = NULL;
 	counter = 0;
 	while (++counter <= number_philos)
@@ -65,17 +51,15 @@ t_pid_list	*create_processes(int number_philos, t_philo *philo)
 			philo_exec(counter, philo);
 		create_append_list(pid, &pid_list);
 	}
-	waitpid(pid_die, NULL, 0);
-	sem = sem_open(SEM_END, 0);
-	sem_post(sem);
-	return (sem_close(sem), pid_list);
+	waitpid(-1, NULL, 0);
+	return (pid_list);
 }
 
-void	processes_wait(t_pid_list *pid_list)
+void	processes_kill(t_pid_list *pid_list)
 {
 	while (pid_list)
 	{
-		waitpid(pid_list->pid, NULL, 0);
+		kill(pid_list->pid, 9);
 		pid_list = pid_list->next;
 	}
 }

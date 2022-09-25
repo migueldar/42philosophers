@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 23:31:10 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/25 08:40:12 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/25 23:37:33 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,13 @@ void	printf_wrapper(int type, t_philo *philo)
 
 	sem_wait(philo->sem_write);
 	gettimeofday(&t_curr, NULL);
-	t_snc_beg = (t_curr.tv_sec - philo->time_init->tv_sec) * 1000;
-	t_snc_beg += (t_curr.tv_usec - philo->time_init->tv_usec) / 1000;
-	if (philo->end)
-		return (sem_post(philo->sem_write), (void) 42);
+	t_snc_beg = (t_curr.tv_sec - philo->time_init.tv_sec) * 1000;
+	t_snc_beg += (t_curr.tv_usec - philo->time_init.tv_usec) / 1000;
 	if (type == 0)
 		printf("%s[%lldms] %d has taken a fork%s\n",
 			CYAN, t_snc_beg, philo->id, FN);
 	else if (type == 1)
-		printf("%s[%lldms] %d is eating%s\n", BLUE, t_snc_beg, philo->id, FN);
+		printf(BLUE"[%lldms] %d is eating\n"FN, t_snc_beg, philo->id);
 	else if (type == 2)
 		printf("%s[%lldms] %d is sleeping%s\n", GREEN, t_snc_beg, philo->id, FN);
 	else if (type == 3)
