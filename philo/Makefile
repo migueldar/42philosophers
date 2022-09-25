@@ -1,5 +1,5 @@
 NAME = philosophers
-SRC = main.c utils.c exec.c philo_create_free.c philo_create_free2.c thread_create_free.c ft_usleep.c
+SRC = main.c utils.c exec.c philo_create_free.c philo_create_free2.c thread_create_free.c utils2.c
 CFLAGS = -Wall -Wextra -Werror -O3
 RM = /bin/rm -rf
 OBJ = $(SRC:.c=.o)
