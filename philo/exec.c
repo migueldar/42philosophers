@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/10 02:51:56 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/23 02:20:00 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/25 08:30:12 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,30 @@ int	check_philo_dead(t_philo_list *philo)
 
 void	philo_sleep(t_philo_list *philo)
 {
+	int	slept;
+
 	printf_wrapper(2, philo);
-	ft_usleep(philo->time_sleep * 1000);
+	slept = 0;
+	while (slept++ < philo->time_sleep)
+	{
+		ft_usleep(1000);
+		if (end_value(philo) || check_philo_dead(philo))
+			break ;
+	}
 }
 
 void	philo_think(t_philo_list *philo)
 {
+	int	slept;
+
 	printf_wrapper(3, philo);
-	ft_usleep(philo->time_think * 1000);
+	slept = 0;
+	while (slept++ < philo->time_think)
+	{
+		ft_usleep(philo->time_think * 1000);
+		if (end_value(philo) || check_philo_dead(philo))
+			break ;
+	}
 }
 
 void	philo_eat(t_philo_list *philo)
