@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 01:58:26 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/23 02:15:56 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/26 00:20:15 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ static t_philo_list	*malloc_philo(void)
 		return (garbage_coll_philo(new, new->time_init,
 				new->time_last_ate, new->fork_right), NULL);
 	if (pthread_mutex_init(new->mutex_right, NULL))
-		return (free(new->mutex_right), garbage_coll_philo(new, new->time_init, new->time_last_ate,
-				new->fork_right), NULL);
+		return (free(new->mutex_right), garbage_coll_philo(new, new->time_init,
+				new->time_last_ate, new->fork_right), NULL);
 	return (new);
 }
 

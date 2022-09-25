@@ -6,7 +6,7 @@
 /*   By: mde-arpe <mde-arpe@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/10 02:51:56 by mde-arpe          #+#    #+#             */
-/*   Updated: 2022/09/25 08:30:12 by mde-arpe         ###   ########.fr       */
+/*   Updated: 2022/09/26 00:14:26 by mde-arpe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,7 @@ void	philo_sleep(t_philo_list *philo)
 
 	printf_wrapper(2, philo);
 	slept = 0;
-	while (slept++ < philo->time_sleep)
-	{
-		ft_usleep(1000);
-		if (end_value(philo) || check_philo_dead(philo))
-			break ;
-	}
+	ft_usleep(1000 * philo->time_sleep, philo);
 }
 
 void	philo_think(t_philo_list *philo)
@@ -49,12 +44,7 @@ void	philo_think(t_philo_list *philo)
 
 	printf_wrapper(3, philo);
 	slept = 0;
-	while (slept++ < philo->time_think)
-	{
-		ft_usleep(philo->time_think * 1000);
-		if (end_value(philo) || check_philo_dead(philo))
-			break ;
-	}
+	ft_usleep(1000 * philo->time_think, philo);
 }
 
 void	philo_eat(t_philo_list *philo)
@@ -71,14 +61,14 @@ void	philo_eat(t_philo_list *philo)
 				printf_wrapper(0, philo);
 				printf_wrapper(0, philo);
 				printf_wrapper(1, philo);
-				ft_usleep(philo->time_eat * 1000);
+				ft_usleep(philo->time_eat * 1000, philo);
 				set_to_zero(philo->fork_left, philo->mutex_left);
 				set_to_zero(philo->fork_right, philo->mutex_right);
 				break ;
 			}
 			set_to_zero(philo->fork_right, philo->mutex_right);
 		}
-		ft_usleep(500);
+		ft_usleep(500, philo);
 	}
 }
 
