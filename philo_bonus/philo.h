@@ -75,6 +75,6 @@ int				create_semaphores(int n_forks, t_philo *philo);
 void			close_semaphores(t_philo *philo);
 void			unlink_semaphores(void);
 void			philo_loop(t_philo *philo);
-//void			*malloc(size_t n);
+void			*malloc(size_t n);
 
 #endif

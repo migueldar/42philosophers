@@ -22,10 +22,10 @@
 // 	return (calloc(n, 1));
 // }
 
-void	leaks(void)
-{
-	system("leaks philosophers");
-}
+// void	leaks(void)
+// {
+// 	system("leaks philosophers");
+// }
 
 //status 0 if fail
 //-1 in last parameter means no limit of iteractions
@@ -71,8 +71,6 @@ int	garbaje_coll(int *args, t_philo *philo, const char *msg)
 	return (1);
 }
 
-//TODO
-//data races
 int	main(int argc, char **argv)
 {
 	int			*args;
@@ -90,7 +88,7 @@ int	main(int argc, char **argv)
 		return (garbaje_coll(args, &philo, "Semaphores creation fail\n"), 1);
 	pid_list = create_processes(args[0], &philo);
 	if (!pid_list)
-		return (garbaje_coll(args, &philo, "Fork fail\n"), 1);
+		return (garbaje_coll(args, &philo, "Processes creation fail\n"), 1);
 	processes_kill(pid_list);
 	free_pid_list(pid_list);
 	garbaje_coll(args, &philo, NULL);

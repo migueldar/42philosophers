@@ -31,19 +31,13 @@ int	check_philo_dead(t_philo_list *philo)
 
 void	philo_sleep(t_philo_list *philo)
 {
-	int	slept;
-
 	printf_wrapper(2, philo);
-	slept = 0;
 	ft_usleep(1000 * philo->time_sleep, philo);
 }
 
 void	philo_think(t_philo_list *philo)
 {
-	int	slept;
-
 	printf_wrapper(3, philo);
-	slept = 0;
 	ft_usleep(1000 * philo->time_think, philo);
 }
 

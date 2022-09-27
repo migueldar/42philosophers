@@ -38,22 +38,11 @@ void	*check_philo_dead(void *philo_void)
 	return (NULL);
 }
 
-void	single_philo(t_philo *philo)
-{
-	pthread_t	check_death;
-
-	pthread_create(&check_death, NULL, check_philo_dead, philo);
-	pthread_join(check_death, NULL);
-	exit(0);
-}
-
 void	philo_exec(int num, t_philo *philo)
 {
 	pthread_t	check_death;
 
 	philo->id = num;
-	if (philo->number_philos == 1)
-		single_philo(philo);
 	pthread_create(&check_death, NULL, check_philo_dead, philo);
 	pthread_detach(check_death);
 	philo_loop(philo);

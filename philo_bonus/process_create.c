@@ -12,16 +12,18 @@
 
 #include "philo.h"
 
-void	create_append_list(int pid, t_pid_list **list)
+//protect better
+int	create_append_list(int pid, t_pid_list **list)
 {
 	t_pid_list	*new;
 
 	new = malloc(sizeof(t_pid_list));
 	if (!new)
-		return ;
+		return (1);
 	new->pid = pid;
 	new->next = *list;
 	*list = new;
+	return (0);
 }
 
 void	free_pid_list(t_pid_list *list)
@@ -36,20 +38,26 @@ void	free_pid_list(t_pid_list *list)
 	}
 }
 
+//may protect fork
 t_pid_list	*create_processes(int number_philos, t_philo *philo)
 {
 	int			counter;
 	int			pid;
 	t_pid_list	*pid_list;
+	int			status;
 
 	pid_list = NULL;
 	counter = 0;
 	while (++counter <= number_philos)
 	{
 		pid = fork();
+		if (pid == -1)
+			return (processes_kill(pid_list), NULL);
 		if (pid == 0)
 			philo_exec(counter, philo);
-		create_append_list(pid, &pid_list);
+		status = create_append_list(pid, &pid_list);
+		if (status)
+			return (processes_kill(pid_list), NULL);
 	}
 	waitpid(-1, NULL, 0);
 	return (pid_list);

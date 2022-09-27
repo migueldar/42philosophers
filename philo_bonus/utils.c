@@ -91,7 +91,7 @@ void	ft_usleep(long long useconds)
 	curr_time_u = curr_time.tv_sec * 1000000 + curr_time.tv_usec;
 	while (curr_time_u - start_time_u < useconds)
 	{
-		usleep(100);
+		usleep(500);
 		gettimeofday(&curr_time, NULL);
 		curr_time_u = curr_time.tv_sec * 1000000 + curr_time.tv_usec;
 	}

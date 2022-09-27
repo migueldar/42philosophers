@@ -71,7 +71,7 @@ t_thread_list	*thread_create(int *args, t_philo_list *philo_l)
 		{
 			if (args[0] % 2 == 0)
 				philo_l = philo_l->next;
-			ft_usleep(100);
+			ft_usleep(100, NULL);
 		}
 	}
 	return (thread_l);
